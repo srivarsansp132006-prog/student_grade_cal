@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Source Code') {
+            steps {
+                echo 'Fetching source code from repository...'
+                checkout scm
+            }
+        }
+
+        stage('Version Control') {
+            steps {
+                echo 'Code is managed in Git...'
+            }
+        }
+
+        stage('Continuous Integration') {
+            steps {
+                echo 'Running Python grade calculator tests...'
+                sh 'python3 student_grades_push2.py < test_input.txt'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Packaging application...'
+                sh 'zip grade_calculator.zip student_grades_push2.py'
+            }
+        }
+
+        stage('Deployment') {
+            steps {
+                echo 'Deploying application...'
+                sh 'cp student_grades_push2.py /tmp/'
+            }
+        }
+    }
+}
